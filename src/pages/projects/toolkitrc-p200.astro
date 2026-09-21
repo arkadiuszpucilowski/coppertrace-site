@@ -1,0 +1,118 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout
+  title="ToolkitRC P200 Reverse Engineering — CopperTrace"
+  description="Reverse engineering a ToolkitRC P200 V1 desktop power supply: USB bootloader, firmware, GD32 MCU, SWD and control-bus investigation."
+>
+  <article class="article">
+    <div class="article-meta">Project 001 · 21 September 2026 · In progress</div>
+    <h1>Reverse engineering the ToolkitRC P200</h1>
+    <p class="lead">
+      The goal is simple: take three compact P200 supplies, understand how their control
+      electronics work, and turn them into a computer-controlled three-channel bench supply.
+      The interesting part is everything between those two points.
+    </p>
+
+    <div class="callout">
+      This is a live engineering notebook. Confirmed measurements are separated from working
+      hypotheses, and conclusions are revised when new evidence contradicts them.
+    </div>
+
+    <h2>Why this supply?</h2>
+    <p>
+      The P200 is small, can be powered from a 24 V DC bus, provides a programmable main output,
+      and also contains a useful USB-C fast-charging output. Three units could cover most
+      everyday low-current bench work while a larger RIDEN supply remains available for
+      occasional high-power loads.
+    </p>
+
+    <h2>Identifying the hardware</h2>
+    <p>
+      The unit under test is the original P200 rather than the later P200 V2. The enclosure is
+      approximately 84 mm long, matching the V1 mechanical dimensions. This mattered immediately:
+      V1 and V2 use different firmware packages.
+    </p>
+
+    <div class="fact-grid">
+      <div class="fact">
+        <strong>Model</strong>
+        <span>ToolkitRC P200 V1</span>
+      </div>
+      <div class="fact">
+        <strong>Main MCU</strong>
+        <span>GD32F103CBT6 observed on PCB</span>
+      </div>
+      <div class="fact">
+        <strong>Update interface</strong>
+        <span>USB Mass Storage</span>
+      </div>
+      <div class="fact">
+        <strong>Firmware file</strong>
+        <span>ToolkitRC P200 V1.05-STN · app.upg</span>
+      </div>
+    </div>
+
+    <h2>USB: useful, but not remote control</h2>
+    <p>
+      Connecting the P200 to Linux exposed a single USB interface: STMicroelectronics
+      <code>0483:5820</code>, class 8 Mass Storage, SCSI Bulk-Only. Linux mounted a tiny FAT12
+      volume labelled <code>Toolkit</code>. No CDC serial, HID or secondary vendor interface was
+      exposed.
+    </p>
+    <p>
+      The volume is therefore useful for firmware update work, but it does not provide an obvious
+      documented path for normal PC control.
+    </p>
+
+    <h2>Firmware package</h2>
+    <p>
+      The official V1.05-STN package contains an <code>app.upg</code> image of 86,548 bytes.
+      Linux identifies a Cortex-M vector table at the beginning, including an initial stack pointer
+      of <code>0x200013F0</code> and a reset vector of <code>0x08009101</code>.
+    </p>
+    <p>
+      Useful plaintext strings are present in the image, including output voltage/current labels,
+      USB charging protocol names and a <code>START OUTPUT</code> message. However, a first-pass
+      assumption that file offsets mapped directly to executable flash addresses did not survive
+      testing: data at the apparent reset location did not disassemble as sensible Thumb code.
+      That is now treated as an unresolved firmware-format question rather than forcing an
+      interpretation.
+    </p>
+
+    <h2>PCB access changes the plan</h2>
+    <p>
+      Opening the unit revealed labelled test points and a debug header. The board exposes signals
+      labelled for 3.3 V, reset, clock/data and several control points. The GD32F103 supports SWD,
+      so a read-only debug connection is one of the next investigation paths.
+    </p>
+    <p>
+      Another group of test points appears to expose a low-voltage serial control bus near the
+      power-control section. The next step is to measure the idle voltages first, then capture the
+      traffic with a logic analyser while changing voltage, current limit and output state.
+    </p>
+
+    <h2>Next measurements</h2>
+    <p>The next bench session will focus on evidence rather than modification:</p>
+    <ul>
+      <li>Measure all labelled test-point voltages relative to ground.</li>
+      <li>Capture the suspected clock/data pair with sigrok/PulseView.</li>
+      <li>Record separate traces for boot, output on/off, voltage changes and current-limit changes.</li>
+      <li>Verify SWD pin continuity before connecting the debugger.</li>
+      <li>Keep all first SWD operations read-only; no unlock or erase operations.</li>
+    </ul>
+
+    <h2>End goal</h2>
+    <p>
+      If the control path can be reproduced safely, the display boards may no longer be required.
+      A small microcontroller interface could expose voltage, current, output state and telemetry
+      to a Linux host, allowing three P200 power stages to share one 24 V source and appear as
+      independent channels in a web dashboard.
+    </p>
+
+    <div class="callout">
+      Target architecture: 24 V supply → three P200 power channels → Pico-class controller →
+      Linux dashboard, with the existing high-power RIDEN channel retained for occasional loads.
+    </div>
+  </article>
+</Layout>
