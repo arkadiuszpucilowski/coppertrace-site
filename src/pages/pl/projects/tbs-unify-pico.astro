@@ -1,0 +1,14 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+---
+<Layout lang="pl" title="Sterowanie TBS Unify z Pico — CopperTrace" description="Moduł Raspberry Pi Pico sterujący analogowym VTX TBS Unify na stanowisku testowym.">
+<article class="article"><div class="article-meta">Projekt 004 · Działający podsystem</div><h1>Sterowanie stanowiskiem TBS Unify z Pico</h1>
+<p class="lead">Dedykowany moduł Raspberry Pi Pico sterujący analogowym VTX TBS Unify jako częścią powtarzalnego stanowiska testowego RF małej mocy.</p>
+<div class="callout"><strong>Potwierdzony sprzęt.</strong> To istniejący analogowy węzeł nadajnika TBS używany na stanowisku, a nie badanie odbiornika TBS Fusion.</div>
+<h2>Cel</h2><p>Moduł zamienia analogowy VTX w kontrolowane źródło testowe dla powtarzalnych eksperymentów Sky Serpent. Zamiast ręcznie konfigurować nadajnik przed każdym capture, Pico zapewnia interfejs sterowany programowo i możliwy do integracji z całym stanowiskiem.</p>
+<h2>Architektura</h2><div class="diagram"><div class="diagram-title">WĘZEŁ TESTOWY TBS UNIFY</div><div class="diagram-row"><div class="diagram-node">Stanowisko Linux / Labrax</div></div><div class="diagram-arrow">↓</div><div class="diagram-row"><div class="diagram-node diagram-accent">Kontroler Raspberry Pi Pico</div></div><div class="diagram-arrow">↓</div><div class="diagram-row diagram-split"><div class="diagram-node">Zasilanie / enable</div><div class="diagram-node">Interfejs sterowania VTX</div></div><div class="diagram-arrow">↘ &nbsp;&nbsp; znany stan testowy &nbsp;&nbsp; ↙</div><div class="diagram-row"><div class="diagram-node">Analogowy VTX TBS Unify</div></div></div>
+<h2>Rola w laboratorium RF</h2><p>Węzeł Unify zapewnia znane analogowe źródło RF, które może być włączane i konfigurowane przez infrastrukturę testową. Dzięki temu eksperymenty odbiorcze i detekcyjne można powiązać z kontrolowanym stanem nadajnika i powtarzać w porównywalnych warunkach.</p>
+<h2>Bezpieczeństwo i powtarzalność</h2><p>Stanowisko jest przeznaczone do ograniczonych czasowo testów małej mocy, z nadajnikiem podłączonym do odpowiedniej anteny lub obciążenia i z niezależną możliwością odcięcia zasilania. Celem są powtarzalne pomiary, a nie zwiększanie mocy RF.</p>
+<h2>Integracja</h2><p>Moduł Pico jest częścią większego laboratorium transmisyjnego razem z osobnym kontrolerem DJI O4. Oba rozwiązania przenoszą powtarzalną konfigurację nadajnika do kontrolowanego interfejsu sprzętowego, pozostawiając Linuxowi sekwencjonowanie testów, capture i zapis wyników.</p>
+<div class="callout">Kolejna aktualizacja doda zweryfikowane połączenia i sekwencję sterowania bezpośrednio z gotowego fizycznego modułu Unify.</div>
+</article></Layout>
