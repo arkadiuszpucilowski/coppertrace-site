@@ -1,0 +1,14 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout title="TBS Unify Pico Test-Bench Control — CopperTrace" description="A Raspberry Pi Pico control module for a TBS Unify analogue VTX test bench.">
+<article class="article"><div class="article-meta">Project 004 · Working subsystem</div><h1>TBS Unify + Pico test-bench control</h1>
+<p class="lead">A dedicated Raspberry Pi Pico module used to control a TBS Unify analogue VTX as part of a repeatable, low-power RF test bench.</p>
+<div class="callout"><strong>Confirmed hardware.</strong> This is the existing TBS analogue transmitter node used on the bench, not the TBS Fusion receiver investigation.</div>
+<h2>Purpose</h2><p>The module turns an analogue VTX into a controllable test source for repeatable Sky Serpent experiments. Instead of manually configuring the transmitter for each capture, the Pico provides a software-controlled interface that can be integrated into the wider test-bench workflow.</p>
+<h2>Architecture</h2><div class="diagram"><div class="diagram-title">TBS UNIFY TEST NODE</div><div class="diagram-row"><div class="diagram-node">Linux / Labrax test bench</div></div><div class="diagram-arrow">↓</div><div class="diagram-row"><div class="diagram-node diagram-accent">Raspberry Pi Pico controller</div></div><div class="diagram-arrow">↓</div><div class="diagram-row diagram-split"><div class="diagram-node">Power / enable control</div><div class="diagram-node">VTX control interface</div></div><div class="diagram-arrow">↘ &nbsp;&nbsp; known test state &nbsp;&nbsp; ↙</div><div class="diagram-row"><div class="diagram-node">TBS Unify analogue VTX</div></div></div>
+<h2>Role in the RF laboratory</h2><p>The Unify node provides a known analogue RF source that can be switched and configured by the test infrastructure. This allows receiver and detection experiments to be associated with a controlled transmitter state and repeated under comparable conditions.</p>
+<h2>Safety and repeatability</h2><p>The bench is designed for bounded, low-power tests with the transmitter connected to an appropriate antenna or load and with power control available independently of the higher-level experiment. The goal is repeatable measurement, not increased RF output.</p>
+<h2>Integration</h2><p>The Pico module forms one part of a wider transmission laboratory alongside the separate DJI O4 controller. Both follow the same principle: move repetitive transmitter setup into a controlled hardware interface so Linux-side automation can concentrate on experiment sequencing, capture and evidence.</p>
+<div class="callout">A future update will add the verified wiring and control sequence from the physical Unify node once those details are captured directly from the finished module.</div>
+</article></Layout>
