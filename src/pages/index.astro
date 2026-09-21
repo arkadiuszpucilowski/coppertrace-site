@@ -2,61 +2,74 @@
 import Layout from '../layouts/Layout.astro';
 ---
 <Layout>
-  <section class="wrap hero">
-    <div>
-      <div class="kicker">Electronics · Embedded · Reverse Engineering · RF</div>
-      <h1>Built on the bench.</h1>
-      <p class="lead">
-        Practical engineering projects, measurements and experiments — from power electronics
-        and firmware analysis to RF systems, embedded control and automated test equipment.
-      </p>
+  <section class="wrap portfolio-hero">
+    <div class="kicker">Electronics · Embedded · RF · Reverse Engineering</div>
+    <h1>Measure.<br />Understand.<br /><span>Build.</span></h1>
+    <p class="lead">
+      Independent engineering projects exploring electronics from the inside out —
+      hardware reverse engineering, embedded systems, RF/SDR, test &amp; measurement and automation.
+    </p>
+    <div class="hero-actions">
+      <a class="button primary" href="/projects/">Explore projects →</a>
+      <a class="button" href="/about/">About CopperTrace</a>
     </div>
-    <aside class="hero-aside">
-      <strong>Current work</strong>
-      Reverse engineering compact lab hardware and developing modular RF sensing infrastructure.
-    </aside>
   </section>
 
   <section class="section">
     <div class="wrap">
       <div class="section-head">
-        <div>
-          <div class="kicker">Selected work</div>
-          <h2>Projects</h2>
-        </div>
-        <p>
-          Projects are documented as engineering notebooks: assumptions, measurements,
-          failures, evidence and the final implementation.
-        </p>
+        <div><div class="kicker">Selected work</div><h2>Featured projects</h2></div>
+        <p>Engineering notebooks built around measurements, experiments and working hardware.</p>
       </div>
 
-      <div class="grid">
-        <a class="card featured" href="/projects/toolkitrc-p200/">
-          <div class="meta">Project 001 · In progress</div>
-          <h3>ToolkitRC P200 smart power supply</h3>
-          <p>
-            Firmware analysis, SWD, control-bus sniffing and a plan to convert three compact
-            supplies into a remotely controlled three-channel lab PSU.
-          </p>
-          <div class="tags">
-            <span class="tag">GD32F103</span><span class="tag">SWD</span><span class="tag">I²C</span>
-            <span class="tag">USB-PD</span><span class="tag">RP2350</span>
+      <div class="project-pair">
+        <a class="project-panel" href="/projects/toolkitrc-p200/">
+          <div class="project-topline"><span>PROJECT 001</span><span>IN PROGRESS</span></div>
+          <div class="project-visual circuit-visual" aria-hidden="true">
+            <span class="trace t1"></span><span class="trace t2"></span><span class="trace t3"></span>
+            <span class="chip">P200</span>
           </div>
+          <h3>ToolkitRC P200</h3>
+          <p>Reverse engineering a compact desktop power supply and developing it into a computer-controlled multi-channel lab instrument.</p>
+          <div class="tags"><span class="tag">GD32</span><span class="tag">SWD</span><span class="tag">I²C</span><span class="tag">USB-PD</span></div>
+          <div class="project-link">View project →</div>
         </a>
 
-        <a class="card small" href="/projects/sky-serpent/">
-          <div class="meta">Project 002 · Active R&amp;D</div>
+        <a class="project-panel" href="/projects/sky-serpent/">
+          <div class="project-topline"><span>PROJECT 002</span><span>ACTIVE R&amp;D</span></div>
+          <div class="project-visual rf-visual" aria-hidden="true">
+            <span class="rf-core"></span><span class="rf-ring r1"></span><span class="rf-ring r2"></span><span class="rf-ring r3"></span>
+          </div>
           <h3>Sky Serpent</h3>
-          <p>
-            Modular RF sensing research combining embedded receiver nodes, SDR hardware,
-            Ethernet infrastructure and automated signal analysis.
-          </p>
-          <div class="tags">
-            <span class="tag">RF</span><span class="tag">SDR</span><span class="tag">Embedded</span>
-            <span class="tag">Linux</span>
-          </div>
+          <p>Modular RF sensing research combining embedded receiver nodes, SDR hardware, Ethernet infrastructure and automated analysis.</p>
+          <div class="tags"><span class="tag">RF</span><span class="tag">SDR</span><span class="tag">Embedded</span><span class="tag">Linux</span></div>
+          <div class="project-link">View project →</div>
         </a>
       </div>
+    </div>
+  </section>
+
+  <section class="section capability-section">
+    <div class="wrap capability-grid">
+      <div>
+        <div class="kicker">On the bench</div>
+        <h2>What I work with</h2>
+      </div>
+      <div class="capability-list">
+        <span>Electronics</span><span>Embedded systems</span><span>Test &amp; measurement</span>
+        <span>RF / SDR</span><span>Linux</span><span>Automation</span><span>Reverse engineering</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section closing-section">
+    <div class="wrap closing">
+      <div class="kicker">CopperTrace</div>
+      <h2>From first measurement<br />to working system.</h2>
+      <p>
+        A record of independent engineering projects — including the wrong assumptions,
+        useful measurements and iterations that happen before the finished result.
+      </p>
     </div>
   </section>
 </Layout>
