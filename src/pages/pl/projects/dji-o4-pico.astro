@@ -1,0 +1,15 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+---
+<Layout lang="pl" title="Sterowanie stanowiskiem DJI O4 z Pico — CopperTrace" description="Kontroler Raspberry Pi Pico do powtarzalnych testów laboratoryjnych DJI O4.">
+<article class="article"><div class="article-meta">Projekt 003 · Działający podsystem</div><h1>Automatyczne sterowanie stanowiskiem DJI O4</h1>
+<p class="lead">Kontroler oparty na Raspberry Pi Pico, który pozwala powtarzalnie testować DJI O4: sterowane zasilanie, komunikacja szeregowa w stylu FC, stan uzbrojenia i kontrolowane sekwencje testowe.</p>
+<div class="callout"><strong>Zakres.</strong> Ta strona opisuje kontroler stanowiska testowego, a nie reverse engineering protokołu RF. Testy są prowadzone jako kontrolowane eksperymenty laboratoryjne małej mocy.</div>
+<h2>Problem</h2><p>Eksperymenty RF łatwiej porównywać, gdy nadajnik za każdym razem zaczyna od znanego stanu. Ręczne zasilanie, uzbrajanie i konfiguracja wprowadzają zmienność i utrudniają automatyczne sekwencje.</p>
+<h2>Architektura</h2><div class="diagram"><div class="diagram-title">STEROWANIE STANOWISKIEM O4</div><div class="diagram-row"><div class="diagram-node">Linux / Labrax</div></div><div class="diagram-arrow">↓</div><div class="diagram-row"><div class="diagram-node diagram-accent">Raspberry Pi Pico</div></div><div class="diagram-arrow">↓</div><div class="diagram-row diagram-split"><div class="diagram-node">Przekaźnik / cutoff</div><div class="diagram-node">Sterowanie szeregowe FC</div></div><div class="diagram-arrow">↘ &nbsp;&nbsp; kontrolowany stan &nbsp;&nbsp; ↙</div><div class="diagram-row"><div class="diagram-node">DJI O4 test unit</div></div></div>
+<h2>Potwierdzone na stanowisku</h2><div class="fact-grid"><div class="fact"><strong>Controller</strong><span>Dedykowany Raspberry Pi Pico</span></div><div class="fact"><strong>Łącze szeregowe</strong><span>UART, 115200 8N1</span></div><div class="fact"><strong>Model sterowania</strong><span>Komunikacja MSPv1 w stylu FC</span></div><div class="fact"><strong>Bezpieczeństwo</strong><span>Niezależny sprzętowy cutoff zasilania</span></div></div>
+<p>Kontroler odtwarza zachowanie arm/disarm używane na stanowisku i pozwala deterministycznie wprowadzić O4 w znany stan testowy. Podczas prac potwierdzono również telemetrię napięcia w goglach oraz działającą ścieżkę DisplayPort OSD.</p>
+<h2>Dlaczego sprzętowy cutoff jest ważny</h2><p>Automatyzacja programowa nie powinna być jedynym sposobem zakończenia testu nadajnika. Stanowisko ma więc niezależny cutoff przekaźnikowy ze zweryfikowanym limitem czasu. Testy mają ograniczony czas oraz okresy chłodzenia.</p>
+<h2>Co to umożliwia</h2><p>Dzięki programowemu nadzorowi zasilania i sterowania host Linux może wykonywać powtarzalne eksperymenty, wiązać capture ze znanym stanem nadajnika i zachowywać dane z każdego testu.</p>
+<div class="callout">Publikujemy tu potwierdzoną funkcjonalność; szczegóły implementacji ujawniające niezwiązane prace nad reverse engineeringiem RF pozostają poza publicznym artykułem.</div>
+</article></Layout>
