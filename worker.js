@@ -33,7 +33,7 @@ async function handleContact(request, env) {
     return json({ ok: false, error: "Please complete all fields correctly." }, 400);
   }
 
-  const from = env.CONTACT_FROM || "CopperTrace <onboarding@resend.dev>";
+  const from = env.CONTACT_FROM || "CopperTrace <contact@coppertrace.co.uk>";
   const text = [
     "New CopperTrace contact message",
     "",
