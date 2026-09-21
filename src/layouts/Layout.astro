@@ -1,42 +1,53 @@
 ---
 import '../styles/global.css';
-
-interface Props {
-  title?: string;
-  description?: string;
-}
-
+interface Props { title?: string; description?: string; lang?: 'en'|'pl'; alternatePath?: string; }
 const {
-  title = 'CopperTrace — Electronics, Embedded & Reverse Engineering',
-  description = 'Independent electronics, embedded systems, RF and reverse-engineering projects.'
-} = Astro.props;
+ title='CopperTrace — Electronics, Embedded & Reverse Engineering',
+ description='Independent electronics, embedded systems, RF and reverse-engineering projects.',
+ lang='en', alternatePath
+}=Astro.props;
+const pl=lang==='pl';
+const currentPath=Astro.url.pathname;
+const otherPath=alternatePath ?? (pl ? currentPath.replace(/^\/pl(?=\/|$)/,'') || '/' : '/pl'+(currentPath==='/'?'/' : currentPath));
 ---
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title}</title>
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="wrap nav">
-        <a class="brand" href="/">
-          <span class="brand-mark" aria-hidden="true"></span>
-          <span>COPPERTRACE</span>
-        </a>
-        <nav aria-label="Primary navigation">
-          <ul>
-            <li><a href="/projects/">Projects</a></li>
-            <li><a href="/about/">About</a></li>
-            <li><a href="/contact/">Contact</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-    <main><slot /></main>
-    <footer><div class="wrap">CopperTrace — independent engineering notes on electronics, embedded systems and reverse engineering.</div></footer>
-  </body>
-</html>
+<html lang={lang}>
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width"/>
+<meta name="description" content={description}/><link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="alternate" hreflang="en" href={pl ? otherPath : currentPath}/>
+<link rel="alternate" hreflang="pl" href={pl ? currentPath : otherPath}/>
+<title>{title}</title>
+<script is:inline>
+(function(){
+  try {
+    const pref=localStorage.getItem('ct-lang');
+    const path=location.pathname;
+    const isPl=path==='/pl'||path.startsWith('/pl/');
+    const browserPl=(navigator.language||'').toLowerCase().startsWith('pl');
+    if ((pref==='pl'||(!pref&&browserPl))&&!isPl) location.replace('/pl'+(path==='/'?'/' : path)+location.search+location.hash);
+    if (pref==='en'&&isPl) location.replace((path.replace(/^\/pl/,'')||'/')+location.search+location.hash);
+  } catch(e) {}
+})();
+</script>
+</head>
+<body>
+<header class="site-header"><div class="wrap nav">
+<a class="brand" href={pl?'/pl/':'/'}><span class="brand-mark" aria-hidden="true"></span><span>COPPERTRACE</span></a>
+<div class="nav-right">
+<nav aria-label={pl?'Główna nawigacja':'Primary navigation'}><ul>
+<li><a href={pl?'/pl/projects/':'/projects/'}>{pl?'Projekty':'Projects'}</a></li>
+<li><a href={pl?'/pl/about/':'/about/'}>{pl?'O mnie':'About'}</a></li>
+<li><a href={pl?'/pl/contact/':'/contact/'}>{pl?'Kontakt':'Contact'}</a></li>
+</ul></nav>
+<div class="language-switch" aria-label={pl?'Wybór języka':'Language selector'}>
+<a href={pl?otherPath:currentPath} data-lang="en" class={!pl?'active':''}>EN</a><span>/</span>
+<a href={pl?currentPath:otherPath} data-lang="pl" class={pl?'active':''}>PL</a>
+</div>
+</div></div></header>
+<main><slot /></main>
+<footer><div class="wrap">{pl?'CopperTrace — niezależne projekty z elektroniki, systemów embedded i reverse engineeringu.':'CopperTrace — independent engineering notes on electronics, embedded systems and reverse engineering.'}</div></footer>
+<script is:inline>
+document.querySelectorAll('.language-switch a').forEach(a=>a.addEventListener('click',()=>{try{localStorage.setItem('ct-lang',a.dataset.lang)}catch(e){}}));
+</script>
+</body></html>
