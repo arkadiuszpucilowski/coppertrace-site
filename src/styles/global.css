@@ -357,3 +357,19 @@ footer {
  .project-pair,.capability-grid{grid-template-columns:1fr}.capability-grid{gap:22px}
  .project-visual{height:125px}.project-topline{font-size:.66rem}
 }
+
+.contact-page { max-width: 860px; }
+.contact-form { margin: 38px 0; display: grid; gap: 20px; }
+.contact-row { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.contact-form label { display: grid; gap: 8px; color: var(--muted); font-size: .9rem; }
+.contact-form input,.contact-form textarea {
+  width: 100%; border: 1px solid var(--line); border-radius: 10px; background: #0e120e;
+  color: var(--text); padding: 13px 14px; font: inherit; outline: none;
+}
+.contact-form input:focus,.contact-form textarea:focus { border-color: var(--copper); }
+.contact-form textarea { resize: vertical; min-height: 160px; }
+.contact-form button { justify-self: start; font: inherit; cursor: pointer; }
+.contact-form button:disabled { opacity: .45; cursor: not-allowed; }
+.form-status { color: var(--muted); font-size: .9rem; margin: 0; }
+.contact-honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+@media (max-width:620px){ .contact-row { grid-template-columns:1fr; } }
