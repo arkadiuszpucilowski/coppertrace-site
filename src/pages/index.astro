@@ -1,0 +1,59 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout>
+  <section class="wrap hero">
+    <div>
+      <div class="kicker">Electronics · Embedded · Reverse Engineering · RF</div>
+      <h1>Built on the bench.</h1>
+      <p class="lead">
+        Practical engineering projects, measurements and experiments — from power electronics
+        and firmware analysis to RF systems, embedded control and automated test equipment.
+      </p>
+    </div>
+    <aside class="hero-aside">
+      <strong>Current work</strong>
+      Reverse engineering a ToolkitRC P200 desktop power supply and turning three units into a
+      compact, computer-controlled multi-channel bench supply.
+    </aside>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="kicker">Selected work</div>
+          <h2>Projects</h2>
+        </div>
+        <p>
+          Projects are documented as engineering notebooks: assumptions, measurements,
+          failures, evidence and the final implementation.
+        </p>
+      </div>
+
+      <div class="grid">
+        <a class="card featured" href="/projects/toolkitrc-p200/">
+          <div class="meta">Project 001 · In progress</div>
+          <h3>ToolkitRC P200 smart power supply</h3>
+          <p>
+            Firmware analysis, SWD, control-bus sniffing and a plan to convert three compact
+            supplies into a remotely controlled three-channel lab PSU.
+          </p>
+          <div class="tags">
+            <span class="tag">GD32F103</span>
+            <span class="tag">SWD</span>
+            <span class="tag">I²C</span>
+            <span class="tag">USB-PD</span>
+            <span class="tag">RP2350</span>
+          </div>
+        </a>
+
+        <div class="card small">
+          <div class="meta">Coming next</div>
+          <h3>RF / FPV detection</h3>
+          <p>Modular receiver nodes, signal detection, evidence capture and automated test infrastructure.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
