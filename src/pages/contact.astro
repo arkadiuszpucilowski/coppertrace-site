@@ -2,42 +2,14 @@
 import Layout from '../layouts/Layout.astro';
 ---
 <Layout title="Contact — CopperTrace" description="Contact CopperTrace about engineering projects, collaboration or technical work.">
-  <article class="article contact-page">
-    <div class="article-meta">Contact</div>
-    <h1>Get in touch.</h1>
-    <p class="lead">
-      Questions about a project, engineering work or collaboration? Send a message below.
-      The contact address is not published on this site.
-    </p>
-
-    <form class="contact-form" id="contact-form">
-      <div class="contact-row">
-        <label>
-          <span>Name</span>
-          <input type="text" name="name" autocomplete="name" maxlength="100" required />
-        </label>
-        <label>
-          <span>Email</span>
-          <input type="email" name="email" autocomplete="email" maxlength="200" required />
-        </label>
-      </div>
-      <label>
-        <span>Message</span>
-        <textarea name="message" rows="7" maxlength="5000" required></textarea>
-      </label>
-
-      <div class="contact-honeypot" aria-hidden="true">
-        <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
-      </div>
-
-      <button class="button primary" type="submit" disabled>Send message</button>
-      <p class="form-status" role="status">
-        Message delivery is being configured. The form will be enabled once the private mail route is connected.
-      </p>
-    </form>
-
-    <div class="callout">
-      No email address, phone number or private location is exposed in the public page source.
-    </div>
-  </article>
+<article class="article contact-page"><div class="article-meta">Contact</div><h1>Get in touch.</h1><p class="lead">Questions about a project, engineering work or collaboration? Send a message below. The contact address is not published on this site.</p>
+<form class="contact-form" id="contact-form">
+<div class="contact-row"><label><span>Name</span><input type="text" name="name" autocomplete="name" maxlength="100" required/></label><label><span>Email</span><input type="email" name="email" autocomplete="email" maxlength="200" required/></label></div>
+<label><span>Message</span><textarea name="message" rows="7" maxlength="5000" required></textarea></label>
+<div class="contact-honeypot" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"/></label></div>
+<button class="button primary" type="submit">Send message</button><p class="form-status" role="status">The form is ready. If delivery has not yet been configured, you will see a clear message.</p>
+</form><div class="callout">No email address, phone number or private location is exposed in the public page source.</div></article>
+<script is:inline>
+(()=>{const f=document.getElementById('contact-form');if(!f)return;const b=f.querySelector('button');const s=f.querySelector('.form-status');f.addEventListener('submit',async e=>{e.preventDefault();if(!f.reportValidity())return;b.disabled=true;s.textContent="Sending…";const d=Object.fromEntries(new FormData(f).entries());try{const r=await fetch('/api/contact',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(d)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'failed');f.reset();s.textContent="Thanks — your message has been sent.";}catch(err){s.textContent=err.message==='Contact delivery is not configured yet.'?err.message:"The message could not be sent. Please try again later.";}finally{b.disabled=false;}});})();
+</script>
 </Layout>
