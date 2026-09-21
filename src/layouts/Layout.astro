@@ -1,0 +1,50 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'CopperTrace — Electronics, Embedded & Reverse Engineering',
+  description = 'Independent electronics, embedded systems, RF and reverse-engineering projects.'
+} = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap nav">
+        <a class="brand" href="/">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>COPPERTRACE</span>
+        </a>
+        <nav aria-label="Primary navigation">
+          <ul>
+            <li><a href="/projects/">Projects</a></li>
+            <li><a href="/notes/">Notes</a></li>
+            <li><a href="/about/">About</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer>
+      <div class="wrap">
+        CopperTrace — independent engineering notes on electronics, embedded systems and reverse engineering.
+      </div>
+    </footer>
+  </body>
+</html>
