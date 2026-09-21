@@ -373,3 +373,5 @@ footer {
 .form-status { color: var(--muted); font-size: .9rem; margin: 0; }
 .contact-honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 @media (max-width:620px){ .contact-row { grid-template-columns:1fr; } }
+
+.nav-right{display:flex;align-items:center;gap:22px}.language-switch{display:flex;align-items:center;gap:6px;font:700 .72rem ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);letter-spacing:.06em}.language-switch a{padding:6px 2px}.language-switch a.active{color:var(--copper-bright)}@media(max-width:760px){.nav-right{gap:10px}.nav{height:auto;min-height:74px;padding:12px 0;gap:12px}.brand span:last-child{display:none}nav ul{gap:10px}.language-switch{font-size:.68rem}}
