@@ -1,0 +1,108 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout
+  title="Sky Serpent — CopperTrace"
+  description="A modular RF sensing research platform combining embedded receiver nodes, SDR, Ethernet infrastructure and automated signal analysis."
+>
+  <article class="article">
+    <div class="article-meta">Project 002 · Active R&amp;D</div>
+    <h1>Sky Serpent</h1>
+    <p class="lead">
+      A modular RF sensing research platform exploring how embedded receiver nodes,
+      software-defined radio and centralised analysis can be combined into repeatable,
+      evidence-driven RF experiments.
+    </p>
+
+    <div class="callout">
+      This public overview intentionally stays at system level. Detailed detection signatures,
+      raw captures, datasets and implementation-specific classification methods are kept private
+      while the research develops.
+    </div>
+
+    <h2>Research objective</h2>
+    <p>
+      Sky Serpent investigates RF-based detection and characterisation in complex radio
+      environments. The emphasis is not simply on observing RF energy, but on building the
+      tools needed to collect repeatable measurements, compare observations and evaluate
+      techniques for reducing false positives.
+    </p>
+
+    <div class="diagram" role="img" aria-label="Sky Serpent high-level architecture">
+      <div class="diagram-title">HIGH-LEVEL ARCHITECTURE</div>
+      <div class="diagram-row">
+        <div class="diagram-node">RF environment</div>
+      </div>
+      <div class="diagram-arrow">↓</div>
+      <div class="diagram-row diagram-split">
+        <div class="diagram-node">Embedded sensor nodes</div>
+        <div class="diagram-node">SDR sensing</div>
+      </div>
+      <div class="diagram-arrow">↘ &nbsp;&nbsp;&nbsp; Ethernet &nbsp;&nbsp;&nbsp; ↙</div>
+      <div class="diagram-row">
+        <div class="diagram-node diagram-accent">Labrax analysis infrastructure</div>
+      </div>
+      <div class="diagram-arrow">↓</div>
+      <div class="diagram-row diagram-split">
+        <div class="diagram-node">Evidence capture</div>
+        <div class="diagram-node">Analysis &amp; comparison</div>
+      </div>
+    </div>
+
+    <h2>Modular sensing</h2>
+    <p>
+      The platform separates sensing from central analysis. Small network-connected nodes can
+      concentrate on acquiring observations while Linux systems handle storage, comparison,
+      visualisation and more computationally expensive processing.
+    </p>
+    <p>
+      One established development path uses embedded Ethernet-connected receiver hardware for
+      analogue 5.8 GHz experiments. The wider platform also incorporates software-defined radio
+      for research that requires access to raw RF/IQ information.
+    </p>
+
+    <h2>Controlled RF laboratory</h2>
+    <p>
+      A detector is difficult to evaluate when the transmitted signal is unknown. Sky Serpent
+      therefore includes controlled, low-power test infrastructure so experiments can be repeated
+      against known conditions and the resulting observations retained for later comparison.
+    </p>
+
+    <div class="diagram" role="img" aria-label="Controlled RF test workflow">
+      <div class="diagram-title">EVIDENCE-FIRST TEST LOOP</div>
+      <div class="diagram-flow">
+        <div class="diagram-node">Known test condition</div><div class="diagram-arrow-inline">→</div>
+        <div class="diagram-node">RF observation</div><div class="diagram-arrow-inline">→</div>
+        <div class="diagram-node">Capture</div><div class="diagram-arrow-inline">→</div>
+        <div class="diagram-node">Compare</div>
+      </div>
+    </div>
+
+    <h2>Current focus</h2>
+    <div class="fact-grid">
+      <div class="fact"><strong>Embedded sensing</strong><span>Modular Ethernet-connected receiver architecture.</span></div>
+      <div class="fact"><strong>SDR integration</strong><span>Extending experiments beyond dedicated receiver hardware.</span></div>
+      <div class="fact"><strong>Evidence capture</strong><span>Retaining measurements and test context for repeatable analysis.</span></div>
+      <div class="fact"><strong>Automation</strong><span>Building repeatable test and collection workflows.</span></div>
+    </div>
+
+    <h2>Research direction</h2>
+    <p>
+      Current research areas include signal characterisation, multi-sensor correlation,
+      classification, distributed sensing and false-positive reduction. These are research
+      directions rather than claims of completed capability.
+    </p>
+
+    <h2>Why build it?</h2>
+    <p>
+      Sky Serpent is as much a systems-engineering project as an RF project. It brings together
+      electronics, embedded firmware, networking, SDR, Linux infrastructure, signal analysis and
+      automation while keeping each layer measurable and replaceable.
+    </p>
+
+    <div class="callout">
+      The aim is not to start with a predetermined answer about what can be detected. The aim is
+      to build the tools required to measure it and find out.
+    </div>
+  </article>
+</Layout>
