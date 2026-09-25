@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://coppertrace.co.uk/sitemap-index.xml
