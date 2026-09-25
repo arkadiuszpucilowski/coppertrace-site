@@ -1,0 +1,25 @@
+name: SEO checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - seo/technical-foundations-2026-09-25
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      # The existing repository has no lockfile. Do not claim a reproducible install.
+      - run: npm install --package-lock=false --no-audit --no-fund
+      - run: npm run check:seo

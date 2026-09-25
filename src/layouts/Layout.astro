@@ -9,14 +9,32 @@ const {
 const pl=lang==='pl';
 const currentPath=Astro.url.pathname;
 const otherPath=alternatePath ?? (pl ? currentPath.replace(/^\/pl(?=\/|$)/,'') || '/' : '/pl'+(currentPath==='/'?'/' : currentPath));
+
+// Use the production origin, never a preview hostname or query string.
+const site=Astro.site;
+if (!site) throw new Error('Set site in astro.config.mjs before building SEO URLs.');
+const absolutePageUrl=(path: string)=>{
+  const url=new URL(path,site);
+  url.search='';
+  url.hash='';
+  url.pathname=url.pathname.replace(/\/?$/, '/');
+  return url.href;
+};
+const canonicalUrl=absolutePageUrl(currentPath);
+const englishUrl=absolutePageUrl(pl ? otherPath : currentPath);
+const polishUrl=absolutePageUrl(pl ? currentPath : otherPath);
+const sitemapUrl=new URL('/sitemap-index.xml',site).href;
 ---
 <!doctype html>
 <html lang={lang}>
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width"/>
 <meta name="description" content={description}/><link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
-<link rel="alternate" hreflang="en" href={pl ? otherPath : currentPath}/>
-<link rel="alternate" hreflang="pl" href={pl ? currentPath : otherPath}/>
+<link rel="canonical" href={canonicalUrl}/>
+<link rel="alternate" hreflang="en" href={englishUrl}/>
+<link rel="alternate" hreflang="pl" href={polishUrl}/>
+<link rel="alternate" hreflang="x-default" href={englishUrl}/>
+<link rel="sitemap" type="application/xml" href={sitemapUrl}/>
 <title>{title}</title>
 <script is:inline>
 (function(){
