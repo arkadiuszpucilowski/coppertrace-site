@@ -1,14 +1,24 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 ---
-<Layout lang="pl" title="Sterowanie TBS Unify z Pico — CopperTrace" description="Moduł Raspberry Pi Pico sterujący analogowym VTX TBS Unify na stanowisku testowym.">
-<article class="article"><div class="article-meta">Projekt 004 · Działający podsystem</div><h1>Sterowanie stanowiskiem TBS Unify z Pico</h1>
-<p class="lead">Dedykowany moduł Raspberry Pi Pico sterujący analogowym VTX TBS Unify jako częścią powtarzalnego stanowiska testowego RF małej mocy.</p>
-<div class="callout"><strong>Potwierdzony sprzęt.</strong> To istniejący analogowy węzeł nadajnika TBS używany na stanowisku, a nie badanie odbiornika TBS Fusion.</div>
+<Layout lang="pl" title="Kontroler TBS Unify z Pico i LCD — CopperTrace" description="Działający kontroler TBS Unify z Raspberry Pi Pico, LCD, własnym firmware i potwierdzonym odczytem ustawień częstotliwości oraz mocy przez SmartAudio.">
+<article class="article"><div class="article-meta">Projekt 004 · Aktualizacja 13 października 2026 · Działa</div><h1>Kontroler TBS Unify z Pico i LCD</h1>
+<p class="lead">Własny kontroler Raspberry Pi Pico z interfejsem LCD do analogowego nadajnika wideo TBS Unify. Projekt łączy lokalny wyświetlacz, autorski firmware i sprawdzoną komunikację SmartAudio do powtarzalnych eksperymentów na stanowisku.</p>
+<div class="callout success"><strong>Działający kontroler.</strong> Projekt TBS Unify łączy Pico, LCD i własne oprogramowanie sterujące. Na stanowisku zweryfikowano status, zmianę częstotliwości oraz odczyt ustawienia mocy.</div>
 <h2>Cel</h2><p>Moduł zamienia analogowy VTX w kontrolowane źródło testowe dla powtarzalnych eksperymentów Sky Serpent. Zamiast ręcznie konfigurować nadajnik przed każdym capture, Pico zapewnia interfejs sterowany programowo i możliwy do integracji z całym stanowiskiem.</p>
-<h2>Architektura</h2><div class="diagram"><div class="diagram-title">WĘZEŁ TESTOWY TBS UNIFY</div><div class="diagram-row"><div class="diagram-node">Stanowisko Linux / Labrax</div></div><div class="diagram-arrow">↓</div><div class="diagram-row"><div class="diagram-node diagram-accent">Kontroler Raspberry Pi Pico</div></div><div class="diagram-arrow">↓</div><div class="diagram-row diagram-split"><div class="diagram-node">Zasilanie / enable</div><div class="diagram-node">Interfejs sterowania VTX</div></div><div class="diagram-arrow">↘ &nbsp;&nbsp; znany stan testowy &nbsp;&nbsp; ↙</div><div class="diagram-row"><div class="diagram-node">Analogowy VTX TBS Unify</div></div></div>
+<h2>LCD i własne sterowanie</h2>
+<p>LCD jest częścią lokalnego interfejsu kontrolera. Własny firmware RP2040 obsługuje komunikację SmartAudio z VTX, tworząc praktyczny moduł sterowania na stanowisku. Prace nad tym interfejsem umożliwiają także integrację nadajnika ze stanowiskiem Linux.</p>
+<h2>Sprawdzona komunikacja</h2>
+<div class="fact-grid">
+<div class="fact"><strong>Nadajnik</strong><span>TBS Unify Pro 5G8 HV Race V2</span></div>
+<div class="fact"><strong>Kontroler</strong><span>Raspberry Pi Pico / RP2040</span></div>
+<div class="fact"><strong>Protokół</strong><span>SmartAudio 2.1 · 4850 baud w testowanym układzie</span></div>
+<div class="fact"><strong>Interfejs lokalny</strong><span>LCD i własny firmware kontrolera</span></div>
+</div>
+<p>Testy obejmowały odczyt statusu nadajnika, zmianę częstotliwości z 5665 na 5800 MHz wraz z odczytem zwrotnym oraz ustawienie i odczyt wartości mocy 14 dBm. To wyniki sprawdzenia protokołu sterowania; odczyt ustawienia nie jest kalibrowanym pomiarem mocy wyjściowej RF.</p>
+<h2>Architektura</h2><div class="diagram"><div class="diagram-title">WĘZEŁ TESTOWY TBS UNIFY</div><div class="diagram-row"><div class="diagram-node">Stanowisko Linux / Labrax</div></div><div class="diagram-arrow">↓</div><div class="diagram-row"><div class="diagram-node diagram-accent">Raspberry Pi Pico · własny firmware + LCD</div></div><div class="diagram-arrow">↓</div><div class="diagram-row diagram-split"><div class="diagram-node">Zasilanie / enable</div><div class="diagram-node">SmartAudio · sterowanie / odczyt</div></div><div class="diagram-arrow">↘ &nbsp;&nbsp; znany stan testowy &nbsp;&nbsp; ↙</div><div class="diagram-row"><div class="diagram-node">Analogowy VTX TBS Unify</div></div></div>
 <h2>Rola w laboratorium RF</h2><p>Węzeł Unify zapewnia znane analogowe źródło RF, które może być włączane i konfigurowane przez infrastrukturę testową. Dzięki temu eksperymenty odbiorcze i detekcyjne można powiązać z kontrolowanym stanem nadajnika i powtarzać w porównywalnych warunkach.</p>
 <h2>Bezpieczeństwo i powtarzalność</h2><p>Stanowisko jest przeznaczone do ograniczonych czasowo testów małej mocy, z nadajnikiem podłączonym do odpowiedniej anteny lub obciążenia i z niezależną możliwością odcięcia zasilania. Celem są powtarzalne pomiary, a nie zwiększanie mocy RF.</p>
 <h2>Integracja</h2><p>Moduł Pico jest częścią większego laboratorium transmisyjnego razem z osobnym kontrolerem DJI O4. Oba rozwiązania przenoszą powtarzalną konfigurację nadajnika do kontrolowanego interfejsu sprzętowego, pozostawiając Linuxowi sekwencjonowanie testów, capture i zapis wyników.</p>
-<div class="callout">Kolejna aktualizacja doda zweryfikowane połączenia i sekwencję sterowania bezpośrednio z gotowego fizycznego modułu Unify.</div>
+<div class="callout"><strong>Rezultat:</strong> działający moduł sterowania TBS z interfejsem LCD, własnym firmware Pico i sprawdzoną komunikacją z nadajnikiem.</div>
 </article></Layout>

@@ -1,14 +1,24 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 ---
-<Layout title="TBS Unify Pico Test-Bench Control — CopperTrace" description="A Raspberry Pi Pico control module for a TBS Unify analogue VTX test bench.">
-<article class="article"><div class="article-meta">Project 004 · Working subsystem</div><h1>TBS Unify + Pico test-bench control</h1>
-<p class="lead">A dedicated Raspberry Pi Pico module used to control a TBS Unify analogue VTX as part of a repeatable, low-power RF test bench.</p>
-<div class="callout"><strong>Confirmed hardware.</strong> This is the existing TBS analogue transmitter node used on the bench, not the TBS Fusion receiver investigation.</div>
+<Layout title="TBS Unify Controller with Pico and LCD — CopperTrace" description="A working TBS Unify controller with Raspberry Pi Pico, LCD, custom firmware and verified SmartAudio frequency and power-setting readback.">
+<article class="article"><div class="article-meta">Project 004 · Updated 13 October 2026 · Working</div><h1>TBS Unify controller with Pico and LCD</h1>
+<p class="lead">A custom Raspberry Pi Pico controller with an LCD interface for a TBS Unify analogue video transmitter. The project combines a local display with custom firmware and verified SmartAudio communication for repeatable bench experiments.</p>
+<div class="callout success"><strong>Working controller.</strong> The TBS Unify project combines Pico, LCD and custom control software. Status, frequency changes and power-setting readback have been verified on the bench.</div>
 <h2>Purpose</h2><p>The module turns an analogue VTX into a controllable test source for repeatable Sky Serpent experiments. Instead of manually configuring the transmitter for each capture, the Pico provides a software-controlled interface that can be integrated into the wider test-bench workflow.</p>
-<h2>Architecture</h2><div class="diagram"><div class="diagram-title">TBS UNIFY TEST NODE</div><div class="diagram-row"><div class="diagram-node">Linux / Labrax test bench</div></div><div class="diagram-arrow">↓</div><div class="diagram-row"><div class="diagram-node diagram-accent">Raspberry Pi Pico controller</div></div><div class="diagram-arrow">↓</div><div class="diagram-row diagram-split"><div class="diagram-node">Power / enable control</div><div class="diagram-node">VTX control interface</div></div><div class="diagram-arrow">↘ &nbsp;&nbsp; known test state &nbsp;&nbsp; ↙</div><div class="diagram-row"><div class="diagram-node">TBS Unify analogue VTX</div></div></div>
+<h2>LCD and custom control</h2>
+<p>The LCD forms part of the local interface on the controller. Custom RP2040 firmware handles the SmartAudio exchange with the VTX, providing a practical control module for the test setup. The same transmitter-control work also supports integration with the Linux bench.</p>
+<h2>Verified communication</h2>
+<div class="fact-grid">
+<div class="fact"><strong>Transmitter</strong><span>TBS Unify Pro 5G8 HV Race V2</span></div>
+<div class="fact"><strong>Controller</strong><span>Raspberry Pi Pico / RP2040</span></div>
+<div class="fact"><strong>Protocol</strong><span>SmartAudio 2.1 · 4850 baud in the tested setup</span></div>
+<div class="fact"><strong>Local interface</strong><span>LCD and custom controller firmware</span></div>
+</div>
+<p>Bench checks included reading transmitter status, changing the frequency from 5665 to 5800 MHz and reading it back, and setting and reading back a 14 dBm power setting. These are control-protocol results; readback is not a calibrated measurement of RF output power.</p>
+<h2>Architecture</h2><div class="diagram"><div class="diagram-title">TBS UNIFY TEST NODE</div><div class="diagram-row"><div class="diagram-node">Linux / Labrax test bench</div></div><div class="diagram-arrow">↓</div><div class="diagram-row"><div class="diagram-node diagram-accent">Raspberry Pi Pico · custom firmware + LCD</div></div><div class="diagram-arrow">↓</div><div class="diagram-row diagram-split"><div class="diagram-node">Power / enable control</div><div class="diagram-node">SmartAudio control / readback</div></div><div class="diagram-arrow">↘ &nbsp;&nbsp; known test state &nbsp;&nbsp; ↙</div><div class="diagram-row"><div class="diagram-node">TBS Unify analogue VTX</div></div></div>
 <h2>Role in the RF laboratory</h2><p>The Unify node provides a known analogue RF source that can be switched and configured by the test infrastructure. This allows receiver and detection experiments to be associated with a controlled transmitter state and repeated under comparable conditions.</p>
 <h2>Safety and repeatability</h2><p>The bench is designed for bounded, low-power tests with the transmitter connected to an appropriate antenna or load and with power control available independently of the higher-level experiment. The goal is repeatable measurement, not increased RF output.</p>
 <h2>Integration</h2><p>The Pico module forms one part of a wider transmission laboratory alongside the separate DJI O4 controller. Both follow the same principle: move repetitive transmitter setup into a controlled hardware interface so Linux-side automation can concentrate on experiment sequencing, capture and evidence.</p>
-<div class="callout">A future update will add the verified wiring and control sequence from the physical Unify node once those details are captured directly from the finished module.</div>
+<div class="callout"><strong>Project result:</strong> a working TBS control module with an LCD interface, custom Pico firmware and verified communication with the transmitter.</div>
 </article></Layout>

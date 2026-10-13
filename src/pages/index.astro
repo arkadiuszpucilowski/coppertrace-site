@@ -24,13 +24,13 @@ import Layout from '../layouts/Layout.astro';
 
       <div class="project-pair">
         <a class="project-panel" href="/projects/toolkitrc-p200/">
-          <div class="project-topline"><span>PROJECT 001</span><span>IN PROGRESS</span></div>
+          <div class="project-topline"><span>PROJECT 001</span><span class="project-status">WORKING</span></div>
           <div class="project-visual circuit-visual" aria-hidden="true">
             <span class="trace t1"></span><span class="trace t2"></span><span class="trace t3"></span>
             <span class="chip">P200</span>
           </div>
           <h3>ToolkitRC P200</h3>
-          <p>Reverse engineering a compact desktop power supply and developing it into a computer-controlled multi-channel lab instrument.</p>
+          <p>From hardware investigation to a working P200 project on the bench. A completed milestone in the development of computer-controlled lab power.</p>
           <div class="tags"><span class="tag">GD32</span><span class="tag">SWD</span><span class="tag">I²C</span><span class="tag">USB-PD</span></div>
           <div class="project-link">View project →</div>
         </a>
@@ -43,6 +43,30 @@ import Layout from '../layouts/Layout.astro';
           <h3>Sky Serpent</h3>
           <p>Modular RF sensing research combining embedded receiver nodes, SDR hardware, Ethernet infrastructure and automated analysis.</p>
           <div class="tags"><span class="tag">RF</span><span class="tag">SDR</span><span class="tag">Embedded</span><span class="tag">Linux</span></div>
+          <div class="project-link">View project →</div>
+        </a>
+
+        <a class="project-panel" href="/projects/dji-o4-pico/">
+          <div class="project-topline"><span>PROJECT 003</span><span class="project-status">WORKING</span></div>
+          <div class="project-visual circuit-visual" aria-hidden="true">
+            <span class="trace t1"></span><span class="trace t2"></span><span class="trace t3"></span>
+            <span class="chip">PICO + O4</span>
+          </div>
+          <h3>DJI O4 arming with Pico</h3>
+          <p>A custom Pico controller that provides ARM/DISARM state over MSP for repeatable DJI O4 bench tests.</p>
+          <div class="tags"><span class="tag">Pico</span><span class="tag">UART</span><span class="tag">MSP</span><span class="tag">ARM / DISARM</span></div>
+          <div class="project-link">View project →</div>
+        </a>
+
+        <a class="project-panel" href="/projects/tbs-unify-pico/">
+          <div class="project-topline"><span>PROJECT 004</span><span class="project-status">WORKING</span></div>
+          <div class="project-visual circuit-visual" aria-hidden="true">
+            <span class="trace t1"></span><span class="trace t2"></span><span class="trace t3"></span>
+            <span class="chip">TBS + LCD</span>
+          </div>
+          <h3>TBS Unify controller with LCD</h3>
+          <p>A custom Pico controller with an LCD interface and verified SmartAudio communication for analogue VTX testing.</p>
+          <div class="tags"><span class="tag">Pico</span><span class="tag">LCD</span><span class="tag">SmartAudio</span><span class="tag">Custom firmware</span></div>
           <div class="project-link">View project →</div>
         </a>
       </div>

@@ -267,6 +267,11 @@ h2 {
 .fact strong { display: block; color: var(--text); }
 .fact span { color: var(--muted); font-size: .92rem; }
 
+.project-topline .project-status,
+.card .meta.project-status { color: var(--green); }
+.callout.success { border-left-color: var(--green); }
+.callout.success strong { color: var(--green); }
+
 footer {
   border-top: 1px solid var(--line);
   color: var(--muted);

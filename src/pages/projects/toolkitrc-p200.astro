@@ -3,21 +3,32 @@ import Layout from '../../layouts/Layout.astro';
 ---
 <Layout
   title="ToolkitRC P200 Reverse Engineering — CopperTrace"
-  description="Reverse engineering a ToolkitRC P200 V1 desktop power supply: USB bootloader, firmware, GD32 MCU, SWD and control-bus investigation."
+  description="A working ToolkitRC P200 bench project, with development notes on hardware identification, USB, firmware and control interfaces."
 >
   <article class="article">
-    <div class="article-meta">Project 001 · 21 September 2026 · In progress</div>
+    <div class="article-meta">Project 001 · Updated 13 October 2026 · Working</div>
     <h1>Reverse engineering the ToolkitRC P200</h1>
     <p class="lead">
-      The goal is simple: take three compact P200 supplies, understand how their control
-      electronics work, and turn them into a computer-controlled three-channel bench supply.
-      The interesting part is everything between those two points.
+      The P200 project has reached a working bench implementation. What began as an
+      investigation into a compact power supply is now a successful practical project
+      in the development of computer-controlled laboratory power.
     </p>
 
-    <div class="callout">
-      This is a live engineering notebook. Confirmed measurements are separated from working
-      hypotheses, and conclusions are revised when new evidence contradicts them.
+    <div class="callout success">
+      <strong>Milestone achieved — the project works.</strong>
+      The working P200 setup was confirmed on 13 October 2026.
+      The initial hardware investigation is retained below as the development record.
     </div>
+
+    <h2>From research to working hardware</h2>
+    <p>
+      The project started with three P200 supplies and a goal of bringing them into a
+      computer-controlled test bench. Identifying the hardware, checking the USB behaviour
+      and investigating the available interfaces formed the basis of that work. Reaching
+      a working implementation is the completed milestone recorded here.
+    </p>
+    <h2>Initial investigation · September 2026</h2>
+    <p>The following notes describe the early findings and investigation plan.</p>
 
     <h2>Why this supply?</h2>
     <p>
@@ -76,24 +87,24 @@ import Layout from '../../layouts/Layout.astro';
       USB charging protocol names and a <code>START OUTPUT</code> message. However, a first-pass
       assumption that file offsets mapped directly to executable flash addresses did not survive
       testing: data at the apparent reset location did not disassemble as sensible Thumb code.
-      That is now treated as an unresolved firmware-format question rather than forcing an
-      interpretation.
+      At that stage it was recorded as an unresolved firmware-format question rather than
+      forcing an interpretation.
     </p>
 
     <h2>PCB access changes the plan</h2>
     <p>
       Opening the unit revealed labelled test points and a debug header. The board exposes signals
       labelled for 3.3 V, reset, clock/data and several control points. The GD32F103 supports SWD,
-      so a read-only debug connection is one of the next investigation paths.
+      so a read-only debug connection was identified as an investigation path.
     </p>
     <p>
-      Another group of test points appears to expose a low-voltage serial control bus near the
-      power-control section. The next step is to measure the idle voltages first, then capture the
-      traffic with a logic analyser while changing voltage, current limit and output state.
+      Another group of test points appeared to expose a low-voltage serial control bus near the
+      power-control section. The investigation plan was to measure the idle voltages first,
+      then capture traffic while changing voltage, current limit and output state.
     </p>
 
-    <h2>Next measurements</h2>
-    <p>The next bench session will focus on evidence rather than modification:</p>
+    <h2>Original measurement plan</h2>
+    <p>The initial plan focused on collecting evidence before modification:</p>
     <ul>
       <li>Measure all labelled test-point voltages relative to ground.</li>
       <li>Capture the suspected clock/data pair with sigrok/PulseView.</li>
@@ -102,16 +113,15 @@ import Layout from '../../layouts/Layout.astro';
       <li>Keep all first SWD operations read-only; no unlock or erase operations.</li>
     </ul>
 
-    <h2>End goal</h2>
+    <h2>The wider laboratory plan</h2>
     <p>
-      If the control path can be reproduced safely, the display boards may no longer be required.
-      A small microcontroller interface could expose voltage, current, output state and telemetry
-      to a Linux host, allowing three P200 power stages to share one 24 V source and appear as
-      independent channels in a web dashboard.
+      The original design brief considered three independent P200 channels, a microcontroller
+      interface and a Linux dashboard. This remains the context for the wider lab architecture;
+      the milestone above records the successful P200 bench project.
     </p>
 
     <div class="callout">
-      Target architecture: 24 V supply → three P200 power channels → Pico-class controller →
+      Original target architecture: 24 V supply → three P200 power channels → Pico-class controller →
       Linux dashboard, with the existing high-power RIDEN channel retained for occasional loads.
     </div>
   </article>
