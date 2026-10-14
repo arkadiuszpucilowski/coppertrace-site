@@ -1,12 +1,47 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 ---
-<Layout lang="pl" title="Reverse engineering ToolkitRC P200 — CopperTrace" description="Działający projekt ToolkitRC P200 na stanowisku oraz notatki z identyfikacji sprzętu, badań USB, firmware i interfejsów sterowania.">
-<article class="article"><div class="article-meta">Projekt 001 · Aktualizacja 13 października 2026 · Działa</div><h1>Reverse engineering ToolkitRC P200</h1>
-<p class="lead">Projekt P200 osiągnął etap działającej implementacji na stanowisku. Badania kompaktowego zasilacza doprowadziły do praktycznego rezultatu w pracach nad sterowanym komputerowo zasilaniem laboratoryjnym.</p>
-<div class="callout success"><strong>Cel tego etapu osiągnięty — projekt działa.</strong> Działanie układu P200 zostało potwierdzone 13 października 2026. Poniżej pozostaje zapis początkowych badań sprzętu.</div>
-<h2>Od badań do działającego sprzętu</h2>
-<p>Punktem wyjścia były trzy zasilacze P200 i zamiar włączenia ich do sterowanego komputerowo stanowiska. Identyfikacja elektroniki, sprawdzenie zachowania USB i badanie dostępnych interfejsów stanowiły podstawę prac. Osiągniętym rezultatem jest działająca implementacja projektu P200.</p>
+<Layout lang="pl" title="Reverse engineering ToolkitRC P200 — CopperTrace" description="Sterowanie ToolkitRC P200 z przeglądarki przez Pico: regulacja V/A, sprawdzone ON/OFF, pomiary Live oraz USB-C OFF/AUTO w Labrax Bench Control.">
+<article class="article">
+<div class="article-meta">Projekt 001 · Aktualizacja 14 października 2026 · Działający prototyp</div>
+<h1>Reverse engineering ToolkitRC P200</h1>
+<p class="lead">Możemy już ustawiać napięcie i limit prądu, przełączać główne wyjście oraz odczytywać pomiary z przeglądarki. Mostek USB na Pico i własny dodatek do firmware łączą działający P200 V1 z Labrax Bench Control. W tym samym panelu działa też USB-C OFF/AUTO.</p>
+<div class="callout success"><strong>Potwierdzone na stanowisku.</strong> Główne wyjście podało 5 V i 6 V, APPLY zmieniło nastawy z zachowaniem ON, a USB OFF/AUTO odcięło i przywróciło zasilanie testera TC64 z odbiornikiem. Szczegółowe próby integracji opisane poniżej wykonaliśmy 10 października 2026.</div>
+
+<h2>Co działa teraz</h2>
+<ul>
+  <li>Regulacja napięcia i limitu prądu oraz główne OUTPUT ON/OFF w jednej karcie przeglądarki.</li>
+  <li>APPLY zachowuje poprzedni stan wyjścia: OFF → sprawdzone nastawy → ON, jeśli wyjście było włączone.</li>
+  <li>Pomiary głównego napięcia, prądu ze znakiem i mocy oraz opcjonalny Live z odczytem co około sekundę.</li>
+  <li>Identyfikacja kontrolera USB-C, pomiary i sprawdzone komendy USB OFF/AUTO.</li>
+  <li>Zasilanie z osobnego źródła 12 V / 5 A, bez zależności od zasilania i stanu Ridena.</li>
+</ul>
+<p>Firmware przyjmuje nastawy głównego wyjścia 1–30 V i 1–10 A w granicach 200 W. Są to granice komend, a nie deklaracja przetestowania całego zakresu pod obciążeniem. Dla obecnego źródła 60 W panel stosuje zachowawczy wspólny budżet 54 W; zmierzony pobór USB jest uwzględniany przed dopuszczeniem nastawy głównego wyjścia.</p>
+
+<h2>APPLY bez ręcznego OFF i ponownego ON</h2>
+<p>Pierwsza wersja dodatku wymagała wyłączenia głównego wyjścia przed zmianą nastaw. Teraz panel wykonuje tę sekwencję automatycznie: odczytuje aktualny stan, sprawdza budżet źródła, w razie potrzeby robi OFF, zapisuje i weryfikuje obie nastawy, a następnie przywraca ON po poprawnych kontrolach. Błąd komendy lub odczytu nie powoduje automatycznego ponowienia ON. Podczas APPLY występuje krótka przerwa zasilania odbiornika; nie jest to płynna regulacja przy stale włączonym wyjściu.</p>
+
+<h2>Wyniki prób na stanowisku</h2>
+<div class="fact-grid">
+  <div class="fact"><strong>Główne wyjście</strong><span>ON 5 V / 1 A; napięcie potwierdzone multimetrem</span></div>
+  <div class="fact"><strong>APPLY przy ON</strong><span>5 → 6 V; odczyt P200 6,034 V, bez błędu</span></div>
+  <div class="fact"><strong>USB OFF</strong><span>TC64 zgasł; osobny odczyt 0 V / 0 A</span></div>
+  <div class="fact"><strong>USB AUTO</strong><span>TC64 ponownie działa: 5,1 V / 1,4 A</span></div>
+</div>
+<p>Walidacja integracji objęła również 40 testów adaptera, sześć testów API, 18 przypadków interfejsu i dziesięć testów kodu ARM. Po każdej zapisanej stronie aktualizacji wykonano pełny odczyt kontrolny. Zachowaliśmy fabryczny kod regulacji i zabezpieczeń, kalibrację oraz nastawy konkretnego egzemplarza.</p>
+<figure class="project-figure">
+  <img src="/images/p200-panel-20261010.png" width="464" height="1604" loading="lazy" alt="Karta P200 w Labrax: główne wyjście OFF, regulacja napięcia i prądu, APPLY oraz przyciski USB-C OFF/AUTO" />
+  <figcaption>Rzeczywisty panel Labrax po próbach 10 października: główne OUTPUT OFF, USB AUTO. Widoczne pomiary są zapisanym stanem z tej próby.</figcaption>
+</figure>
+
+<h2>Jedno Pico na jeden P200</h2>
+<p>Działająca ścieżka sterowania to przeglądarka → lokalna usługa Labrax → mostek USB na Pico → własne łącze GPIO na istniejących przewodach clock/data → dodatek do firmware P200. Do każdego zmodyfikowanego P200 wystarczy jedno Pico. Drugie Pico, używane na początku do badania magistrali, nie jest potrzebne do zwykłego sterowania. USB Mass Storage pozostaje drogą aktualizacji firmware, a nie łączem sterowania podczas pracy.</p>
+
+<h2>Obecne ograniczenia i dalsze kroki</h2>
+<p>USB AUTO przywraca fabryczną negocjację z odbiornikiem; nie wybiera ręcznie napięcia PD ani limitu prądu. Obecny profil własnych komend USB wymaga głównego OUTPUT OFF i obejmuje odbiorniki 5 V do 2 A. Pełne sterowanie POWER całego urządzenia i praca po odłączeniu LCD nie zostały wdrożone ani zweryfikowane. OUTPUT OFF wyłącza główne zaciski, a nie cały zasilacz.</p>
+<p>Pierwszy egzemplarz wyłączał się nieregularnie, również podczas prób bez obciążenia, więc został odłożony. Działającą implementację sprawdziliśmy na drugim egzemplarzu; użytkownik potwierdził również stabilną pracę przez 30 minut. Wskazuje to na problem konkretnego pierwszego zasilacza, ale dokładnej przyczyny nie ustaliliśmy. Kolejne kanały P200 wymagają osobnej integracji.</p>
+<p><a href="https://github.com/arkadiuszpucilowski/coppertrace-site/blob/main/docs/toolkitrc-p200.pl.md">Dokumentacja projektu na GitHubie</a> opisuje zakres prób, architekturę i wyniki walidacji. Jest to zapis prototypu, a nie uniwersalny obraz firmware dla każdej wersji P200.</p>
+
 <h2>Początek badań · wrzesień 2026</h2>
 <p>Poniższe notatki opisują wczesne ustalenia oraz ówczesny plan pomiarów.</p>
 <h2>Dlaczego ten zasilacz?</h2><p>P200 jest mały, może być zasilany z magistrali 24 V DC, ma programowalne główne wyjście oraz przydatny port USB-C z szybkim ładowaniem. Trzy sztuki mogą obsłużyć większość codziennych testów o małym prądzie, pozostawiając większy RIDEN do sporadycznych obciążeń dużej mocy.</p>
@@ -16,6 +51,6 @@ import Layout from '../../../layouts/Layout.astro';
 <h2>Pakiet firmware</h2><p>Oficjalny pakiet V1.05-STN zawiera obraz <code>app.upg</code> o rozmiarze 86 548 bajtów. Linux rozpoznaje na początku tablicę wektorów Cortex-M, w tym początkowy wskaźnik stosu <code>0x200013F0</code> oraz reset vector <code>0x08009101</code>.</p><p>W obrazie znajdują się czytelne stringi dotyczące napięcia, prądu i protokołów ładowania USB. Pierwsze założenie, że offsety pliku odpowiadają bezpośrednio adresom wykonywalnego flash, nie potwierdziło się podczas analizy. Na tym etapie format firmware został zapisany jako nierozwiązana kwestia.</p>
 <h2>Dostęp do PCB zmienia plan</h2><p>Po otwarciu urządzenia znaleźliśmy opisane testpointy oraz złącze debug. Płyta udostępnia sygnały 3,3 V, reset, clock/data i inne punkty kontrolne. GD32F103 obsługuje SWD, dlatego połączenie debuggera w trybie tylko do odczytu zostało wytypowane jako jedna ze ścieżek badań.</p><p>Inna grupa testpointów mogła udostępniać niskonapięciową magistralę sterującą w pobliżu sekcji mocy. Plan zakładał pomiar napięć spoczynkowych, a następnie przechwycenie ruchu podczas zmian napięcia, limitu prądu i stanu wyjścia.</p>
 <h2>Pierwotny plan pomiarów</h2><ul><li>Pomiar wszystkich opisanych testpointów względem GND.</li><li>Przechwycenie podejrzanej pary clock/data za pomocą sigrok/PulseView.</li><li>Osobne capture dla startu, ON/OFF, zmian napięcia i limitu prądu.</li><li>Sprawdzenie ciągłości pinów SWD przed podłączeniem debuggera.</li><li>Pierwsze operacje SWD wyłącznie read-only — bez unlock i erase.</li></ul>
-<h2>Szerszy plan laboratorium</h2><p>Pierwotna koncepcja obejmowała trzy niezależne kanały P200, interfejs mikrokontrolera i dashboard Linux. To kontekst rozwoju całego stanowiska; osiągniętym etapem opisanym powyżej jest działający projekt P200.</p>
-<div class="callout">Pierwotna docelowa architektura: zasilacz 24 V → trzy kanały P200 → kontroler klasy Pico → dashboard Linux, z RIDEN-em zachowanym jako kanał dużej mocy.</div>
+<h2>Szerszy plan laboratorium</h2><p>Docelowo wspólne źródło 24 V ma zasilać niezależny kanał Riden i dwa kanały P200, każdy z własnym mostkiem Pico. Obecny sprawdzony układ to jeden P200 z osobnym źródłem 12 V / 5 A. Dodanie kolejnego kanału nie wymaga zmiany kalibracji działającego egzemplarza.</p>
+<div class="callout">Plan stanowiska: wspólne źródło 24 V DC → Riden + dwa kanały P200 → jedno Pico na P200 → Labrax Bench Control. Budżet wspólnego źródła musi uwzględniać wszystkie aktywne kanały.</div>
 </article></Layout>

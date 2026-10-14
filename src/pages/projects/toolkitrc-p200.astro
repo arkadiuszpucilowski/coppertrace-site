@@ -3,29 +3,92 @@ import Layout from '../../layouts/Layout.astro';
 ---
 <Layout
   title="ToolkitRC P200 Reverse Engineering — CopperTrace"
-  description="A working ToolkitRC P200 bench project, with development notes on hardware identification, USB, firmware and control interfaces."
+  description="ToolkitRC P200 browser control through a Pico: adjustable voltage/current, verified ON/OFF, live measurements and USB-C OFF/AUTO in Labrax Bench Control."
 >
   <article class="article">
-    <div class="article-meta">Project 001 · Updated 13 October 2026 · Working</div>
+    <div class="article-meta">Project 001 · Updated 14 October 2026 · Working bench prototype</div>
     <h1>Reverse engineering the ToolkitRC P200</h1>
     <p class="lead">
-      The P200 project has reached a working bench implementation. What began as an
-      investigation into a compact power supply is now a successful practical project
-      in the development of computer-controlled laboratory power.
+      We can now set voltage and current limit, switch the main output and read measurements
+      from a browser. A Pico USB bridge and a custom firmware extension connect a working
+      P200 V1 to Labrax Bench Control, alongside USB-C OFF/AUTO controls.
     </p>
 
     <div class="callout success">
-      <strong>Milestone achieved — the project works.</strong>
-      The working P200 setup was confirmed on 13 October 2026.
-      The initial hardware investigation is retained below as the development record.
+      <strong>Verified on the bench.</strong>
+      The main output delivered 5 V and 6 V, APPLY changed settings while preserving ON,
+      and USB OFF/AUTO removed and restored power to a TC64 tester and its receiver.
+      The detailed integration tests below were completed on 10 October 2026.
     </div>
 
-    <h2>From research to working hardware</h2>
+    <h2>What works now</h2>
+    <ul>
+      <li>Voltage and current-limit adjustment, plus main OUTPUT ON/OFF, from one browser card.</li>
+      <li>APPLY preserves the previous output state: OFF → verified settings → ON when initially ON.</li>
+      <li>Main voltage, signed current and power measurements, with optional Live polling at approximately one-second intervals.</li>
+      <li>USB-C controller identification, measurements and tested USB OFF/AUTO commands.</li>
+      <li>Operation from a separate 12 V / 5 A source, without requiring RIDEN to power or enable P200.</li>
+    </ul>
     <p>
-      The project started with three P200 supplies and a goal of bringing them into a
-      computer-controlled test bench. Identifying the hardware, checking the USB behaviour
-      and investigating the available interfaces formed the basis of that work. Reaching
-      a working implementation is the completed milestone recorded here.
+      The firmware accepts main setpoints of 1–30 V and 1–10 A within a 200 W limit.
+      These are command bounds, not a claim that the full range has been load-tested.
+      The current 60 W input source has a conservative 54 W shared budget; measured USB
+      power is reserved before allowing a main-output setpoint.
+    </p>
+    <h2>APPLY without the manual OFF/ON sequence</h2>
+    <p>
+      The original firmware extension required the main output to be OFF before changing
+      settings. The panel now performs that sequence automatically. It reads the live state,
+      checks the source budget, switches OFF when necessary, writes and verifies both
+      setpoints, then restores ON only after successful checks. A failed command or readback
+      does not trigger an automatic ON retry. The output is briefly interrupted during APPLY;
+      this is not uninterrupted adjustment under load.
+    </p>
+    <h2>Bench evidence</h2>
+    <div class="fact-grid">
+      <div class="fact"><strong>Main output</strong><span>5 V / 1 A ON verified by multimeter</span></div>
+      <div class="fact"><strong>APPLY while ON</strong><span>5 → 6 V; P200 readback 6.034 V, no fault</span></div>
+      <div class="fact"><strong>USB OFF</strong><span>TC64 dark; independent status 0 V / 0 A</span></div>
+      <div class="fact"><strong>USB AUTO</strong><span>TC64 restored: 5.1 V / 1.4 A</span></div>
+    </div>
+    <p>
+      The integration validation also passed 40 adapter tests, six API tests, 18 frontend
+      cases and ten ARM firmware tests. The firmware update was checked by full direct
+      readback after each written page. Factory regulation, protection code, calibration
+      and device-specific settings were retained.
+    </p>
+    <figure class="project-figure">
+      <img src="/images/p200-panel-20261010.png" width="464" height="1604" loading="lazy"
+        alt="Labrax P200 card showing main output OFF, adjustable voltage/current, APPLY and USB-C OFF/AUTO controls" />
+      <figcaption>Actual Labrax panel after the 10 October tests: main OUTPUT OFF, USB AUTO. Measurements shown here are a saved snapshot.</figcaption>
+    </figure>
+    <h2>One Pico per P200</h2>
+    <p>
+      The working control path is browser → local Labrax service → USB Pico bridge →
+      custom GPIO link on the existing clock/data connection → P200 firmware extension.
+      One Pico is sufficient for each modified P200; the extra Pico used for early bus
+      investigation is not required for routine control. USB mass storage remains the
+      firmware-update path rather than the runtime control link.
+    </p>
+    <h2>Current limits and next steps</h2>
+    <p>
+      USB AUTO restores factory negotiation; it does not manually select a PD voltage or
+      current limit. The current custom USB command profile requires main OUTPUT OFF and
+      covers 5 V receivers up to 2 A. Full device POWER control and operation with the LCD
+      removed have not been implemented or validated. OUTPUT OFF switches the main
+      terminals, not the entire supply.
+    </p>
+    <p>
+      The first unit had intermittent shutdowns, including during idle tests, and was
+      set aside. The working implementation was validated on the second unit, including
+      a reported 30-minute stable run. This suggests a unit-specific problem in the first
+      supply; its exact cause has not been established. Additional P200 channels remain
+      a separate integration step.
+    </p>
+    <p>
+      Read the <a href="https://github.com/arkadiuszpucilowski/coppertrace-site/blob/main/docs/toolkitrc-p200.md">GitHub engineering record</a>
+      for the tested scope, architecture and validation results. This is a prototype record,
+      not a universal firmware image for every P200 revision.
     </p>
     <h2>Initial investigation · September 2026</h2>
     <p>The following notes describe the early findings and investigation plan.</p>
@@ -115,14 +178,15 @@ import Layout from '../../layouts/Layout.astro';
 
     <h2>The wider laboratory plan</h2>
     <p>
-      The original design brief considered three independent P200 channels, a microcontroller
-      interface and a Linux dashboard. This remains the context for the wider lab architecture;
-      the milestone above records the successful P200 bench project.
+      The wider lab plan is a shared 24 V source feeding an independent RIDEN channel and
+      two P200 channels, each with its own Pico bridge. The current validated setup uses
+      one P200 with a separate 12 V / 5 A source. Completing the next channel does not require
+      changing this working unit's calibration.
     </p>
 
     <div class="callout">
-      Original target architecture: 24 V supply → three P200 power channels → Pico-class controller →
-      Linux dashboard, with the existing high-power RIDEN channel retained for occasional loads.
+      Planned lab: shared 24 V DC source → RIDEN + two P200 channels → one Pico per P200 →
+      Labrax Bench Control. The shared-source power budget must cover all active channels.
     </div>
   </article>
 </Layout>
