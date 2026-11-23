@@ -64,7 +64,13 @@ const sitemapUrl=new URL('/sitemap-index.xml',site).href;
 <a href={pl?currentPath:otherPath} data-lang="pl" class={pl?'active':''}>PL</a>
 </div>
 </div></div></header>
-<main><slot /></main>
+<main><slot />
+{currentPath.includes('/projects/') && currentPath.replace(/\/$/,'').split('/').at(-1) !== 'projects' && (
+  <aside class="wrap project-contact">
+    <strong>{pl ? 'Masz pytanie o ten projekt?' : 'Have a question about this project?'}</strong>
+    <a class="button" href={pl ? '/pl/contact/' : '/contact/'}>{pl ? 'Napisz do mnie' : 'Write to me'}</a>
+  </aside>
+)}</main>
 <footer><div class="wrap">{pl?'CopperTrace — niezależne projekty z elektroniki, systemów embedded i reverse engineeringu.':'CopperTrace — independent engineering notes on electronics, embedded systems and reverse engineering.'}</div></footer>
 <script is:inline>
 document.querySelectorAll('.language-switch a').forEach(a=>a.addEventListener('click',()=>{try{localStorage.setItem('ct-lang',a.dataset.lang)}catch(e){}}));

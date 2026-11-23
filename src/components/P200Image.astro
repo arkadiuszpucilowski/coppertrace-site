@@ -1,0 +1,6 @@
+---
+interface Props { alt: string; thumbnail?: boolean; }
+const {alt, thumbnail = false} = Astro.props;
+---
+<img src={thumbnail ? '/images/p200-panel-preview.webp' : '/images/p200-panel-20261010.webp'}
+  alt={alt} width="464" height={thumbnail ? 205 : 1604} loading="lazy" decoding="async" />

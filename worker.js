@@ -48,6 +48,7 @@ async function handleContact(request, env) {
     headers:{"Authorization":"Bearer "+env.RESEND_API_KEY,"Content-Type":"application/json"},
     body:JSON.stringify({from,to:[env.CONTACT_TO],reply_to:email,subject:"CopperTrace contact — "+name,text})
   });
-  if(!response.ok){console.error("Mail provider error",response.status,await response.text());return json({ok:false,error:"Message could not be delivered."},502);}
+  if(!response.ok){console.error("contact_mail_rejected",response.status);return json({ok:false,error:"Message could not be delivered."},502);}
+  console.info("contact_mail_accepted");
   return json({ok:true});
 }

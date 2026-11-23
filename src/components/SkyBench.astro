@@ -1,0 +1,35 @@
+---
+import AnalogueTiming from './AnalogueTiming.astro';
+interface Props { pl?: boolean; }
+const { pl = false } = Astro.props;
+const notes = pl ? [
+  ['Analog', 'Pro58 i podgląd w przeglądarce', 'Po każdej z pięciu zmian kanału odbiornik pokazał ruchomy obraz. Za potwierdzenie uznałem dwa kolejne odczyty wskazujące, że odtwarzacz wyświetla nowe klatki na właściwym kanale. Wykres pokazuje, ile czasu minęło między zauważeniem sygnału a obrazem.'],
+  ['HDZero', 'Shark Byte i przechwytywanie HDMI', 'W dwóch zapisanych próbach automatycznego wyszukiwania obraz na kanale R2 pojawił się po 99,7 i 107,5 s. Sygnał dekodował Shark Byte. W osobnej próbie utrata połączenia USB uniemożliwiła sprawdzenie kanału, choć karta HDMI nadal dostarczała klatki.'],
+  ['DJI O4', 'Nagrania radiowe z E310', 'W jednej sesji przy wzmocnieniu odbiornika 35 dB analiza wskazała kandydata O4 w czterech z czterech fragmentów nagrania. W drugiej sesji przy 15 dB wynik wyniósł zero z czterech. Obraz z kamery potwierdziłem osobno w sparowanych goglach N3.'],
+] : [
+  ['Analogue', 'Pro58 and browser playback', 'Moving video appeared after each of five channel changes. I counted a picture when two successive observations showed the player advancing on the correct channel. The chart shows the gap between observing RF activity and seeing the picture.'],
+  ['HDZero', 'Shark Byte and HDMI capture', 'In two recorded automatic searches, the picture on channel R2 appeared after 99.7 and 107.5 s. Shark Byte decoded the video. In a separate run the USB control connection dropped while the HDMI card kept delivering frames, leaving the receiver channel unverified.'],
+  ['DJI O4', 'Radio recordings from the E310', 'At 35 dB receiver gain the analysis flagged an O4 candidate in four of four excerpts from one session. In a second session at 15 dB it flagged zero of four. I checked the camera picture separately in the paired N3 goggles.'],
+];
+---
+<section id="bench" class="bench">
+  <time datetime="2026-11-23">{pl ? '23 listopada 2026' : '23 November 2026'}</time>
+  <h2>{pl ? 'Wyniki ze stanowiska' : 'Results from the bench'}</h2>
+  <p>{pl ? 'Na stanowisku mierzę osobno trzy zdarzenia: odbiornik zauważa sygnał, analiza wskazuje możliwy rodzaj transmisji, a w przeglądarce pojawia się ruchomy obraz. Każde wymaga innego potwierdzenia.' : 'I measure three events separately on the bench. A receiver sees radio activity, software suggests a signal type, and a video player shows moving frames. Each needs its own check.'}</p>
+  <AnalogueTiming pl={pl}/>
+  <dl>{notes.map(([name, path, description]) => <div><dt>{name}<small>{path}</small></dt><dd>{description}</dd></div>)}</dl>
+  <h3>{pl ? 'Co wymaga kolejnej próby?' : 'What needs another test?'}</h3>
+  <p>{pl ? 'W pięciu nowych próbach z wyłączonym nadajnikiem O4 żadne okno nie dało wskazania. Końcowa weryfikacja danych na komputerze trwała jednak od 8,35 do 9,48 s, przy pięciosekundowym limicie panelu. Chcę powtórzyć pomiar na niezależnej sesji z aktywnym O4 oraz sprawdzić zachowanie przy ruchu Wi-Fi na tej samej częstotliwości. Skuteczność w terenie pozostaje otwartym pytaniem.' : 'Five fresh windows with the bench O4 transmitter off produced no candidate. Final verification on the workstation took 8.35 to 9.48 s, beyond the panel’s five-second limit. I want to repeat the timing on an independent active O4 session and test with Wi-Fi traffic on the same frequency. Field performance remains an open question.'}</p>
+</section>
+<style>
+  .bench { scroll-margin-top: 8rem; margin-block: 3rem; padding-block-start: 1.75rem; border-top: 2px solid var(--copper); }
+  time { color: var(--copper-bright); font: .85rem ui-monospace,monospace; }
+  .bench h2 { margin: .55rem 0 1rem; }
+  .bench figure { margin-block: 1.5rem; }
+  dl { margin: 1rem 0 2rem; }
+  dl > div { display:grid; grid-template-columns: minmax(9rem,1fr) 2fr; gap:1.5rem; padding:1.35rem 0; border-bottom:1px solid var(--line); }
+  dt { font-weight:700; font-size:1.25rem; }
+  dt small { display:block; font-weight:400; font-size:.88rem; color:var(--muted); }
+  dd { margin:0; color:#c4cbc1; }
+  @media(max-width:580px){dl > div{grid-template-columns:1fr;gap:.5rem}}
+</style>

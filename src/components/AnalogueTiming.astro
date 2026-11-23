@@ -1,0 +1,58 @@
+---
+interface Props { pl?: boolean; link?: boolean; }
+const { pl = false, link = false } = Astro.props;
+// Seconds from the source change to the first observed RF and confirmed moving picture.
+const runs = [[2.847, 4.335], [2.582, 5.514], [6.311, 7.750], [4.164, 5.248], [4.888, 5.598]];
+const number = new Intl.NumberFormat(pl ? 'pl-PL' : 'en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const rf = pl ? 'Sygnał RF' : 'RF signal';
+const video = pl ? 'Obraz' : 'Picture';
+---
+<figure class="timing">
+  <figcaption>
+    <span class="source">Sky Serpent / Pro58</span>
+    <strong>{pl ? 'Od sygnału do obrazu' : 'From signal to picture'}</strong>
+    <span>{pl ? 'Czas od zmiany kanału na nadajniku' : 'Elapsed time from a transmitter channel change'}</span>
+  </figcaption>
+  <table>
+    <thead><tr><th scope="col">{pl ? 'Próba' : 'Run'}</th><th scope="col" class="axis"><span>0</span><span>4</span><span>8 s</span></th><th scope="col">{rf}</th><th scope="col">{video}</th></tr></thead>
+    <tbody>{runs.map(([signal, picture], i) => (
+      <tr>
+        <th scope="row">{String(i+1).padStart(2,'0')}</th>
+        <td class="plot" aria-hidden="true"><i style={`left:${signal/8*100}%;width:${(picture-signal)/8*100}%`}></i></td>
+        <td>{number.format(signal)}</td><td>{number.format(picture)}</td>
+      </tr>
+    ))}</tbody>
+  </table>
+  <div class="figure-foot">
+    <span>{pl ? 'Mediana czasu do obrazu' : 'Median time to picture'} <b>{number.format(5.514)} s</b></span>
+    {link && <a href={(pl ? '/pl' : '') + '/projects/sky-serpent/#bench'}>{pl ? 'Opis próby' : 'Test notes'}</a>}
+  </div>
+</figure>
+<style>
+  .timing { margin: 0; min-width: 0; color: var(--text); border: 1px solid #465044; border-top: 3px solid var(--copper-bright); background: #151a16; border-radius: 5px; padding: clamp(16px, 2.7vw, 32px); font-variant-numeric: tabular-nums; }
+  figcaption { display: grid; gap: .35rem; }
+  .source, thead, tbody, .figure-foot b { font-family: ui-monospace, monospace; }
+  .source { color: var(--copper-bright); font-size: .83rem; }
+  figcaption strong { font-size: clamp(1.45rem, 2.2vw, 2rem); line-height: 1.15; letter-spacing: -.035em; }
+  figcaption span:last-child, .figure-foot { font-size: .9rem; color: #c3ccc1; }
+  table { border-collapse: collapse; width: 100%; margin: 1.4rem 0 1.1rem; font-size: .88rem; }
+  th,td { text-align: right; padding: .45rem 0 .45rem .5rem; }
+  th:first-child { text-align: left; padding-left: 0; }
+  thead { color: #adb8ab; font-size: .73rem; }
+  tbody th { color: #b3c0b2; font-weight: 400; }
+  td:last-child { color: #ffb879; }
+  .axis { position: relative; padding: 0; width: 50%; }
+  .axis span { position: absolute; top: 50%; transform: translate(-50%,-50%); }
+  .axis span:first-child { left: 0; transform: translateY(-50%); }
+  .axis span:nth-child(2) { left: 50%; }
+  .axis span:last-child { right: 0; transform: translateY(-50%); }
+  .plot { position: relative; padding: 0; border-inline: 1px solid #394538; background: linear-gradient(90deg,transparent calc(50% - .5px),#394538 50%,transparent calc(50% + .5px)); }
+  .plot i { position: absolute; height: 2px; top: 50%; background: #9ba79a; }
+  .plot i::before,.plot i::after { content: ''; position:absolute; top:50%; transform:translate(-50%,-50%); width:8px; height:8px; }
+  .plot i::before { left:0; border-radius:50%; background:#b2d2b4; }
+  .plot i::after { left:100%; background:#ffb879; }
+  .figure-foot { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.5rem 1rem; padding-top:.75rem; border-top:1px solid #394538; }
+  .figure-foot b { color:var(--text); white-space:nowrap; }
+  .figure-foot a { color:#ffb879; text-decoration:underline; text-underline-offset:4px; padding-block:.4rem; }
+  @media(max-width:420px){.axis{width:39%} th,td{padding-left:.3rem}}
+</style>
