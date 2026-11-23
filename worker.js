@@ -1,6 +1,17 @@
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    if ((request.method === "GET" || request.method === "HEAD") && /^\/linac\/?$/.test(url.pathname)) {
+      return new Response(null, {
+        status: 302,
+        headers: {
+          "Location": "https://coppertrace-linac-log.arkadiuszpucilowski.chatgpt.site/",
+          "Cache-Control": "no-store",
+          "Referrer-Policy": "no-referrer",
+          "X-Robots-Tag": "noindex, nofollow"
+        }
+      });
+    }
     if (request.method === "POST" && url.pathname === "/api/contact") return handleContact(request, env);
     return env.ASSETS.fetch(request);
   }
