@@ -1,34 +1,34 @@
 ---
+import P200Image from '../components/P200Image.astro';
 import Layout from '../layouts/Layout.astro';
+import AnalogueTiming from '../components/AnalogueTiming.astro';
 ---
 <Layout>
   <section class="wrap portfolio-hero">
+    <div class="hero-copy">
     <div class="kicker">Electronics · Embedded · RF · Reverse Engineering</div>
     <h1>Measure.<br />Understand.<br /><span>Build.</span></h1>
     <p class="lead">
-      Independent engineering projects exploring electronics from the inside out —
-      hardware reverse engineering, embedded systems, RF/SDR, test &amp; measurement and automation.
+      Notes from my electronics bench. I document the measurements, firmware and tests behind each build.
     </p>
     <div class="hero-actions">
       <a class="button primary" href="/projects/">Explore projects →</a>
       <a class="button" href="/about/">About CopperTrace</a>
     </div>
+    </div>
+    <AnalogueTiming link />
   </section>
 
   <section class="section">
     <div class="wrap">
       <div class="section-head">
-        <div><div class="kicker">Selected work</div><h2>Featured projects</h2></div>
-        <p>Engineering notebooks built around measurements, experiments and working hardware.</p>
+        <h2>Selected projects</h2>
       </div>
 
       <div class="project-pair">
         <a class="project-panel" href="/projects/toolkitrc-p200/">
           <div class="project-topline"><span>PROJECT 001</span><span class="project-status">WORKING</span></div>
-          <div class="project-visual circuit-visual" aria-hidden="true">
-            <span class="trace t1"></span><span class="trace t2"></span><span class="trace t3"></span>
-            <span class="chip">P200</span>
-          </div>
+          <div class="project-visual panel-preview" aria-hidden="true"><P200Image alt="" thumbnail /></div>
           <h3>ToolkitRC P200</h3>
           <p>Voltage and current control from a browser, automatic APPLY, live measurements and verified USB-C OFF/AUTO in Labrax Bench Control.</p>
           <div class="tags"><span class="tag">GD32</span><span class="tag">Pico</span><span class="tag">Labrax</span><span class="tag">USB-C</span></div>
@@ -41,7 +41,7 @@ import Layout from '../layouts/Layout.astro';
             <span class="rf-core"></span><span class="rf-ring r1"></span><span class="rf-ring r2"></span><span class="rf-ring r3"></span>
           </div>
           <h3>Sky Serpent</h3>
-          <p>Modular RF sensing research combining embedded receiver nodes, SDR hardware, Ethernet infrastructure and automated analysis.</p>
+          <p>Bench notes on analogue video, HDZero reception and experimental O4 signal classification with an E310.</p>
           <div class="tags"><span class="tag">RF</span><span class="tag">SDR</span><span class="tag">Embedded</span><span class="tag">Linux</span></div>
           <div class="project-link">View project →</div>
         </a>
@@ -94,6 +94,7 @@ import Layout from '../layouts/Layout.astro';
         A record of independent engineering projects — including the wrong assumptions,
         useful measurements and iterations that happen before the finished result.
       </p>
+      <a class="button" href="/contact/">Write to me</a>
     </div>
   </section>
 </Layout>

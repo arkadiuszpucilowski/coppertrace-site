@@ -1,4 +1,5 @@
 ---
+import P200Image from '../../../components/P200Image.astro';
 import Layout from '../../../layouts/Layout.astro';
 ---
 <Layout lang="pl" title="Reverse engineering ToolkitRC P200 — CopperTrace" description="Sterowanie ToolkitRC P200 z przeglądarki przez Pico: regulacja V/A, sprawdzone ON/OFF, pomiary Live oraz USB-C OFF/AUTO w Labrax Bench Control.">
@@ -30,7 +31,7 @@ import Layout from '../../../layouts/Layout.astro';
 </div>
 <p>Walidacja integracji objęła również 40 testów adaptera, sześć testów API, 18 przypadków interfejsu i dziesięć testów kodu ARM. Po każdej zapisanej stronie aktualizacji wykonano pełny odczyt kontrolny. Zachowaliśmy fabryczny kod regulacji i zabezpieczeń, kalibrację oraz nastawy konkretnego egzemplarza.</p>
 <figure class="project-figure">
-  <img src="/images/p200-panel-20261010.png" width="464" height="1604" loading="lazy" alt="Karta P200 w Labrax: główne wyjście OFF, regulacja napięcia i prądu, APPLY oraz przyciski USB-C OFF/AUTO" />
+  <P200Image alt="Karta P200 w Labrax: główne wyjście OFF, regulacja napięcia i prądu, APPLY oraz przyciski USB-C OFF/AUTO" />
   <figcaption>Rzeczywisty panel Labrax po próbach 10 października: główne OUTPUT OFF, USB AUTO. Widoczne pomiary są zapisanym stanem z tej próby.</figcaption>
 </figure>
 

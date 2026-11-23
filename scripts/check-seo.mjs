@@ -32,6 +32,7 @@ function pageUrl(url){
 const files=(await walk(root)).filter(file=>file.endsWith('.html') && !/[/\\](404|500)\.html$/.test(file));
 assert(files.length>0,'No HTML pages: run astro build first.');
 const pages=new Map();
+const seenDescriptions=new Set();
 for(const file of files){
   const path=relative(root,file).split(sep).join('/');
   assert(path==='index.html' || path.endsWith('/index.html'),`Unexpected build path: ${path}`);
@@ -56,6 +57,8 @@ for(const file of files){
   const descriptions=tags(html,'meta').filter(meta=>meta.name==='description');
   assert.equal(descriptions.length,1,`Expected one description: ${path}`);
   assert(descriptions[0].content?.trim(),`Empty description: ${path}`);
+  assert(!seenDescriptions.has(descriptions[0].content),`Repeated description: ${path}`);
+  seenDescriptions.add(descriptions[0].content);
   pages.set(expected,{lang,alternates:byLanguage});
 }
 for(const [url,page] of pages){

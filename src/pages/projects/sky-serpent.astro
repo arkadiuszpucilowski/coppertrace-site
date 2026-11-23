@@ -1,19 +1,21 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import SkyBench from '../../components/SkyBench.astro';
 ---
 <Layout
-  title="Sky Serpent — CopperTrace"
-  description="A modular RF sensing research platform combining embedded receiver nodes, SDR, Ethernet infrastructure and automated signal analysis."
+  title="Sky Serpent RF test bench: analogue FPV, HDZero and DJI O4 — CopperTrace"
+  description="Measurements from a Pro58 analogue FPV receiver, Shark Byte HDZero video capture and experimental DJI O4 signal analysis on a USRP E310."
 >
   <article class="article">
     <div class="article-meta">Project 002 · Active R&amp;D</div>
     <h1>Sky Serpent</h1>
     <p class="lead">
-      A modular RF sensing research platform exploring how embedded receiver nodes,
-      software-defined radio and centralised analysis can be combined into repeatable,
-      evidence-driven RF experiments.
+      Sky Serpent is my RF test bench. I use dedicated video receivers and a
+      software-defined radio to study what each can tell me about a transmission,
+      from the first sign of activity to a picture in the browser.
     </p>
 
+    <SkyBench />
     <div class="callout">
       This public overview intentionally stays at system level. Detailed detection signatures,
       raw captures, datasets and implementation-specific classification methods are kept private
